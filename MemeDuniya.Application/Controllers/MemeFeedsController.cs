@@ -13,7 +13,7 @@ namespace MemeDuniya.Application.Controllers
     [ApiController]
     [Route("[controller]")]
     public class MemeFeedsController : ControllerBase
-    {        
+    {
         private readonly ILogger<MemeFeedsController> _logger;
 
         public MemeFeedsController(ILogger<MemeFeedsController> logger)
@@ -28,9 +28,26 @@ namespace MemeDuniya.Application.Controllers
         /// <returns></returns>
         [HttpGet("getFeeds")]
         [AllowAnonymous]
-        public IEnumerable<Feed> GetFeeds()
+        public ActionResult<IEnumerable<Feed>> GetFeeds()
         {
-            throw new NotImplementedException();
+            var controllerUser = ControllerContext.HttpContext.User;
+            var user = User;
+
+            IList<Feed> feeds;
+            if (user.Identity.IsAuthenticated)
+            {
+                feeds = new List<Feed> {
+                    new Feed { UserName=user.Identity.Name, 
+                        Comments = new List<Comment> {new Comment { Text=$"User Authenticated. Authentication type: {user.Identity.AuthenticationType}"}}}
+                };
+            }
+            else
+            {
+                feeds = new List<Feed> {
+                    new Feed { UserName=user.Identity.Name,  Comments = new List<Comment> {new Comment {Text="Not Authenticated"}}}
+                };
+            }
+            return Ok(feeds);
         }
 
         /// <summary>
@@ -38,7 +55,7 @@ namespace MemeDuniya.Application.Controllers
         /// </summary>
         /// <param name="feed"></param>
         [HttpPost("addFeed")]
-        public IActionResult AddFeed(Feed feed) 
+        public IActionResult AddFeed(Feed feed)
         {
             throw new NotImplementedException();
         }

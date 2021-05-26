@@ -9,6 +9,8 @@ namespace MemeDuniya.Repository.Entities
 
         public int UserId { get; set; }
 
+        public string UserName { get; set; }
+
         public string ContentType { get; set; }    
 
         public byte[] ContentData { get; set; }
