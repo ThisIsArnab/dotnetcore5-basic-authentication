@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MemeDuniya.Model;
+using MemeDuniya.Repository.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace MemeDuniya.Application.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class MemeFeedsController : ControllerBase
@@ -24,7 +26,8 @@ namespace MemeDuniya.Application.Controllers
         /// Use cursor to get next set of feeds.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("getFeeds")]
+        [AllowAnonymous]
         public IEnumerable<Feed> GetFeeds()
         {
             throw new NotImplementedException();
@@ -34,7 +37,7 @@ namespace MemeDuniya.Application.Controllers
         /// Adds a feed from user.
         /// </summary>
         /// <param name="feed"></param>
-        [HttpPost]
+        [HttpPost("addFeed")]
         public IActionResult AddFeed(Feed feed) 
         {
             throw new NotImplementedException();
@@ -44,10 +47,14 @@ namespace MemeDuniya.Application.Controllers
         /// Return at most 10 filtered feeds. Only indexed criteria allowed
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        public IEnumerable<Feed> FilterFeeds()
+        [HttpGet("filterFeeds")]
+        public ActionResult<IEnumerable<Feed>> FilterFeeds()
         {
-            throw new NotImplementedException();
+            var feeds = new List<Feed> {
+                new Feed { Id=1, Likes=10, Dislikes=1},
+                new Feed { Id=2, Comments=null }
+            };
+            return Ok(feeds);
         }
 
         /// <summary>
@@ -55,7 +62,7 @@ namespace MemeDuniya.Application.Controllers
         /// </summary>
         /// <param name="keywords"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("searchFeeds")]
         public IEnumerable<Feed> SearchFeeds(string[] keywords)
         {
             throw new NotImplementedException();
