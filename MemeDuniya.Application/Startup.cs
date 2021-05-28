@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using MemeDuniya.Application.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -30,7 +31,16 @@ namespace MemeDuniya.Application
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+            
+            // services.Configure<ForwardedHeadersOptions>(options =>
+            // {
+            //     options.KnownProxies.Add(IPAddress.Parse("10.0.0.100"));
+            // });
+
             services.AddControllers();
+
+            services.Configure<ForwardedHeadersOptions>(options => {
+            });
 
             // Configuration for basic authentication
             services.AddAuthentication("BasicAuthentication").AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
@@ -47,6 +57,11 @@ namespace MemeDuniya.Application
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // app.UseForwardedHeaders(new ForwardedHeadersOptions
+            // {
+            //     ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.All
+            // });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
